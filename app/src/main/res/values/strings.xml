@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="menu_sort">Sort</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="highest_rated">Highest Rated</string>
+    <string name="movie_thumbnail">Movie Thumbnail</string>
+    <string name="default_error">Failed to retrieve data, please try again.</string>
+</resources>
