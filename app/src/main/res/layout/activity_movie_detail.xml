@@ -8,14 +8,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/default_gap">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_movie"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:padding="@dimen/default_gap"
             android:contentDescription="@string/movie_thumbnail" />
 
         <TextView
@@ -24,7 +24,21 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_medium"
             android:textStyle="bold"
+            android:padding="@dimen/default_gap"
             tools:text="Movie title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:padding="@dimen/default_gap"
+
+                android:id="@+id/rating_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="7.0" />
 
         <RatingBar
             android:id="@+id/rating"
@@ -33,17 +47,24 @@
             android:layout_height="wrap_content"
             android:isIndicator="true"
             android:numStars="10"
+            android:padding="@dimen/default_gap"
+
             android:stepSize="0.5" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/default_gap"
+
             tools:text="Release Date : 07/12/2016" />
 
         <TextView
             android:id="@+id/tv_synopsis"
             android:layout_width="match_parent"
+            android:padding="@dimen/default_gap"
             android:layout_height="wrap_content"
             tools:text="This is long synopsis" />
 

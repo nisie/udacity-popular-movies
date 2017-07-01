@@ -42,7 +42,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                     movieItem != null ? movieItem.getImgUrl() : "");
             tvTitle.setText(movieItem != null ? movieItem.getTitle() : "");
             tvSynopsis.setText(movieItem != null ? movieItem.getSynopsis() : "");
-            tvDate.setText(movieItem != null ? movieItem.getReleaseDate() : "");
+            String date = getString(R.string.release_date) +
+                    (movieItem != null ? movieItem.getReleaseDate() : "");
+            tvDate.setText(date);
             rating.setRating(movieItem != null ? movieItem.getRating() : 0);
         }
     }

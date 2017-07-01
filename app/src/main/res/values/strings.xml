@@ -5,4 +5,5 @@
     <string name="highest_rated">Highest Rated</string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
     <string name="default_error">Failed to retrieve data, please try again.</string>
+    <string name="release_date">Release Date :</string>
 </resources>

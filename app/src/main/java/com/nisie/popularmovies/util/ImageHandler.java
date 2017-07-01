@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nisie.popularmovies.R;
 
 
@@ -16,8 +17,7 @@ public class ImageHandler {
         if (!imgUrl.equals("")) {
             Glide.with(ivMovie.getContext())
                     .load(imgUrl)
-                    .error(R.mipmap.ic_launcher_round)
-                    .placeholder(R.mipmap.ic_launcher)
+                    .diskCacheStrategy( DiskCacheStrategy.SOURCE )
                     .into(ivMovie);
         }
     }

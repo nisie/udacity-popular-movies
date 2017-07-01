@@ -30,7 +30,7 @@ public class GetMovieListSubscriber extends Subscriber<MovieResultDomain> {
 
     @Override
     public void onError(Throwable e) {
-        Log.e("NISNIS", e.toString());
+        viewListener.onErrorGetMovieList(R.string.default_error);
     }
 
     @Override

@@ -19,6 +19,11 @@ public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
 
     private static final String API_KEY = "api_key";
     private static final String KEY = "e355e388ec3a7934853ad2a2557f2b05";
+    
+    private static final String SORT_BY = "sort_by";
+    private static final Object HIGHEST_RATED = "vote_average.desc";
+    private static final Object MOST_POPULAR = "popularity.desc";
+    private static final String PAGE = "page";
 
     private MovieListRepository repository;
 
@@ -34,9 +39,22 @@ public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
         return repository.getMovies(requestParams);
     }
 
-    public static Map<String, Object> makeParam() {
+    public static Map<String, Object> makeParam(int currentPage) {
         Map<String, Object> param = new HashMap<>();
         param.put(API_KEY, KEY);
+        param.put(PAGE,currentPage);
+        return param;
+    }
+
+    public static Map<String, Object> makeParamHighestRated(int currentPage) {
+        Map<String, Object> param = makeParam(currentPage);
+        param.put(SORT_BY, HIGHEST_RATED);
+        return param;
+    }
+
+    public static Map<String, Object> makeParamMostPopular(int currentPage) {
+        Map<String, Object> param = makeParam(currentPage);
+        param.put(SORT_BY, MOST_POPULAR);
         return param;
     }
 }

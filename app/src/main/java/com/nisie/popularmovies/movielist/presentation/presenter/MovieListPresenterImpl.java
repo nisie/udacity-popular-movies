@@ -8,20 +8,44 @@ import com.nisie.popularmovies.movielist.presentation.subscriber.GetMovieListSub
  */
 
 public class MovieListPresenterImpl
-        implements MovieListPresenter{
+        implements MovieListPresenter {
 
     private final MovieListPresenter.View viewListener;
     private final GetMovieListUseCase getMovieListUseCase;
+    private int currentPage;
 
     public MovieListPresenterImpl(MovieListPresenter.View viewListener,
                                   GetMovieListUseCase getMovieListUseCase) {
         this.viewListener = viewListener;
         this.getMovieListUseCase = getMovieListUseCase;
+        this.currentPage = 1;
+
     }
 
     @Override
     public void getMovieList() {
-        getMovieListUseCase.execute(GetMovieListUseCase.makeParam(),
+        viewListener.showLoading();
+        getMovieListUseCase.execute(GetMovieListUseCase.makeParam(currentPage),
                 new GetMovieListSubscriber(viewListener));
+    }
+
+    @Override
+    public void getHighestRated() {
+        viewListener.showLoading();
+        getMovieListUseCase.execute(GetMovieListUseCase.makeParamHighestRated(currentPage),
+                new GetMovieListSubscriber(viewListener));
+    }
+
+    @Override
+    public void getMostPopular() {
+        viewListener.showLoading();
+        getMovieListUseCase.execute(GetMovieListUseCase.makeParamMostPopular(currentPage),
+                new GetMovieListSubscriber(viewListener));
+    }
+
+    @Override
+    public void loadMore(int lastItemPosition, int visibleItem) {
+        currentPage += 1;
+        getMovieList();
     }
 }

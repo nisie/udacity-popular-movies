@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.main.domain.executor.JobExecutor;
 import com.nisie.popularmovies.main.presentation.UIThread;
+import com.nisie.popularmovies.main.presentation.util.SpacesItemDecoration;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieListUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
 import com.nisie.popularmovies.movielist.domain.network.service.MovieService;
@@ -30,6 +31,7 @@ public class MovieListActivity extends AppCompatActivity
     private static final int GRID_SPAN = 3;
     private static final int DEFAULT_NO_SORT = 0;
     RecyclerView rvMovie;
+    GridLayoutManager layoutManager;
     MovieAdapter adapter;
 
     MovieListPresenter presenter;
@@ -70,32 +72,45 @@ public class MovieListActivity extends AppCompatActivity
         setContentView(R.layout.activity_movie_list);
         rvMovie = (RecyclerView) findViewById(R.id.rv_movies);
         adapter = MovieAdapter.createInstance(this);
-        rvMovie.setLayoutManager(new GridLayoutManager(this,
+        layoutManager = new GridLayoutManager(this,
                 GRID_SPAN,
                 GridLayoutManager.VERTICAL,
-                false));
+                false);
+        rvMovie.setLayoutManager(layoutManager);
         rvMovie.setAdapter(adapter);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.gap_movie);
+        rvMovie.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+
+        rvMovie.addOnScrollListener(onScroll());
+    }
+
+    private RecyclerView.OnScrollListener onScroll() {
+        return new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastItemPosition = layoutManager.findLastVisibleItemPosition();
+                int visibleItem = layoutManager.getItemCount() - 1;
+                if (!adapter.isLoading())
+                    presenter.loadMore(lastItemPosition, visibleItem);
+            }
+        };
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_highest_rated:
-                loadData(R.id.sort_highest_rated);
+                adapter.clearList();
+                presenter.getHighestRated();
                 return true;
             case R.id.sort_most_popular:
-                loadData(R.id.sort_most_popular);
+                adapter.clearList();
+                presenter.getMostPopular();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void loadData(int sort_id) {
-        if (sort_id != DEFAULT_NO_SORT) {
-            presenter.getMovieList();
-        } else {
-
         }
     }
 
@@ -106,11 +121,18 @@ public class MovieListActivity extends AppCompatActivity
 
     @Override
     public void onSuccessGetMovieList(ArrayList<MovieItem> list) {
+        adapter.finishLoading();
         adapter.addList(list);
     }
 
     @Override
     public void onErrorGetMovieList(int resId) {
+        adapter.finishLoading();
         Toast.makeText(this, getString(resId), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoading() {
+        adapter.showLoading();
     }
 }

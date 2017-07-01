@@ -13,6 +13,12 @@ public interface MovieListPresenter extends BasePresenter{
 
     void getMovieList();
 
+    void getHighestRated();
+
+    void getMostPopular();
+
+    void loadMore(int lastItemPosition, int visibleItem);
+
     interface View {
 
         void goToDetail(MovieItem movieItem);
@@ -20,6 +26,8 @@ public interface MovieListPresenter extends BasePresenter{
         void onSuccessGetMovieList(ArrayList<MovieItem> aVoid);
 
         void onErrorGetMovieList(int resId);
+
+        void showLoading();
     }
 
 }

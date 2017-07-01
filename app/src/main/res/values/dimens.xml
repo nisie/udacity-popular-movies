@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="font_medium">16sp</dimen>
+    <dimen name="gap_movie">5dp</dimen>
+    <dimen name="poster_height">200dp</dimen>
 </resources>
