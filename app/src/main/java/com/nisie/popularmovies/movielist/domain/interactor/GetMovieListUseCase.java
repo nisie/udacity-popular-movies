@@ -19,7 +19,7 @@ public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
 
     private static final String API_KEY = "api_key";
     private static final String KEY = "e355e388ec3a7934853ad2a2557f2b05";
-    
+
     private static final String SORT_BY = "sort_by";
     private static final Object HIGHEST_RATED = "vote_average.desc";
     private static final Object MOST_POPULAR = "popularity.desc";
@@ -36,13 +36,18 @@ public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
 
     @Override
     public Observable<MovieResultDomain> createObservable(Map<String, Object> requestParams) {
-        return repository.getMovies(requestParams);
+        if (requestParams.containsValue(HIGHEST_RATED)) {
+            return repository.getHighestRatedMovies(requestParams);
+        } else if (requestParams.containsValue(MOST_POPULAR)) {
+            return repository.getMostPopularMovies(requestParams);
+        } else
+            return repository.getMovies(requestParams);
     }
 
     public static Map<String, Object> makeParam(int currentPage) {
         Map<String, Object> param = new HashMap<>();
         param.put(API_KEY, KEY);
-        param.put(PAGE,currentPage);
+        param.put(PAGE, currentPage);
         return param;
     }
 

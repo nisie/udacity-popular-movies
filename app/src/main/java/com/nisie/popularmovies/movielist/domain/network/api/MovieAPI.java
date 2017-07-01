@@ -17,4 +17,10 @@ public interface MovieAPI {
 
     @GET("discover/movie")
     Observable<Response<MovieItemResult>> getMovieList(@QueryMap Map<String, Object> params);
+
+    @GET("movie/popular")
+    Observable<Response<MovieItemResult>> getMostPopularMovie(@QueryMap Map<String, Object> params);
+
+    @GET("movie/top_rated")
+    Observable<Response<MovieItemResult>> getTopRatedMovie(@QueryMap Map<String, Object> params);
 }

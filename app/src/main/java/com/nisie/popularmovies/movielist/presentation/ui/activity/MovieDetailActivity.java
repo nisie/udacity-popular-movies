@@ -24,6 +24,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView tvTitle;
     TextView tvDate;
     TextView tvSynopsis;
+    TextView ratingText;
     RatingBar rating;
 
 
@@ -46,6 +47,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     (movieItem != null ? movieItem.getReleaseDate() : "");
             tvDate.setText(date);
             rating.setRating(movieItem != null ? movieItem.getRating() : 0);
+            ratingText.setText(String.valueOf(movieItem != null ? movieItem.getRating() : 0));
         }
     }
 
@@ -61,6 +63,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         tvSynopsis = (TextView) findViewById(R.id.tv_synopsis);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         rating = (RatingBar) findViewById(R.id.rating);
+        ratingText = (TextView) findViewById(R.id.rating_text);
     }
 
     @Override

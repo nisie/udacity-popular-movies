@@ -13,4 +13,9 @@ import rx.Observable;
 public interface MovieListRepository {
 
     Observable<MovieResultDomain> getMovies(Map<String, Object> params);
+
+    Observable<MovieResultDomain> getMostPopularMovies(Map<String, Object> params);
+
+    Observable<MovieResultDomain> getHighestRatedMovies(Map<String, Object> params);
+
 }

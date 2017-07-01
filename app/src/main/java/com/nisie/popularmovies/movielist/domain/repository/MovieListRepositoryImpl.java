@@ -30,4 +30,18 @@ public class MovieListRepositoryImpl implements MovieListRepository {
                 .getMovieList(params)
                 .map(movieListMapper);
     }
+
+    @Override
+    public Observable<MovieResultDomain> getMostPopularMovies(Map<String, Object> params) {
+        return  movieService.getApi()
+                .getMostPopularMovie(params)
+                .map(movieListMapper);
+    }
+
+    @Override
+    public Observable<MovieResultDomain> getHighestRatedMovies(Map<String, Object> params) {
+        return  movieService.getApi()
+                .getTopRatedMovie(params)
+                .map(movieListMapper);
+    }
 }

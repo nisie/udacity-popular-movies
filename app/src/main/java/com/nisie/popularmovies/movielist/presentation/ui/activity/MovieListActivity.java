@@ -90,10 +90,10 @@ public class MovieListActivity extends AppCompatActivity
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                int lastItemPosition = layoutManager.findLastVisibleItemPosition();
-                int visibleItem = layoutManager.getItemCount() - 1;
-                if (!adapter.isLoading())
-                    presenter.loadMore(lastItemPosition, visibleItem);
+//                int lastItemPosition = layoutManager.findLastVisibleItemPosition();
+//                int visibleItem = layoutManager.getItemCount() - 1;
+//                if (!adapter.isLoading())
+//                    presenter.loadMore(lastItemPosition, visibleItem);
             }
         };
     }
