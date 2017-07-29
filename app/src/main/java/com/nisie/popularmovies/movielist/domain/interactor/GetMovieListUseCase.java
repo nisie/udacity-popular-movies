@@ -18,7 +18,7 @@ import rx.Observable;
 public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
 
     private static final String API_KEY = "api_key";
-    private static final String KEY = "[PLEASE INSERT YOUR API KEY]";
+    private static final String KEY = "e355e388ec3a7934853ad2a2557f2b05";
 
     private static final String SORT_BY = "sort_by";
     private static final Object HIGHEST_RATED = "vote_average.desc";

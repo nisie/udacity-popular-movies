@@ -2,6 +2,7 @@ package com.nisie.popularmovies.movielist.presentation.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -10,11 +11,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nisie.popularmovies.R;
-import com.nisie.popularmovies.main.domain.executor.ThreadExecutor;
+import com.nisie.popularmovies.databinding.ActivityMovieDetailBinding;
 import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
-import com.nisie.popularmovies.movielist.presentation.presenter.MovieListPresenter;
-import com.nisie.popularmovies.movielist.presentation.presenter.MovieListPresenterImpl;
-import com.nisie.popularmovies.util.ImageHandler;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -27,7 +25,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView ratingText;
     RatingBar rating;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,20 +36,17 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null
                 && getIntent().getExtras().getParcelable(ARGS_MOVIE) != null) {
             MovieItem movieItem = getIntent().getExtras().getParcelable(ARGS_MOVIE);
-            ImageHandler.loadImageFromUrl(ivMovie,
-                    movieItem != null ? movieItem.getImgUrl() : "");
-            tvTitle.setText(movieItem != null ? movieItem.getTitle() : "");
-            tvSynopsis.setText(movieItem != null ? movieItem.getSynopsis() : "");
-            String date = getString(R.string.release_date) +
-                    (movieItem != null ? movieItem.getReleaseDate() : "");
-            tvDate.setText(date);
-            rating.setRating(movieItem != null ? movieItem.getRating() : 0);
-            ratingText.setText(String.valueOf(movieItem != null ? movieItem.getRating() : 0));
+            if (movieItem != null) {
+                ActivityMovieDetailBinding binding = DataBindingUtil.setContentView(this, getLayoutId());
+                String date = getString(R.string.release_date) + movieItem.getReleaseDate();
+                movieItem.setReleaseDate(date);
+                binding.setMovie(movieItem);
+            }
         }
     }
 
     private void initView() {
-        setContentView(R.layout.activity_movie_detail);
+        setContentView(getLayoutId());
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,5 +75,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(context, MovieDetailActivity.class);
         intent.putExtra(ARGS_MOVIE, movieItem);
         return intent;
+    }
+
+    public int getLayoutId() {
+        return R.layout.activity_movie_detail;
     }
 }

@@ -10,17 +10,19 @@ import java.util.Date;
  */
 
 public class MovieItem implements Parcelable {
-    String imgUrl;
-    String title;
-    String releaseDate;
-    float rating;
-    String synopsis;
+    private String imgUrl;
+    private String title;
+    private String releaseDate;
+    private float rating;
+    private String ratingText;
+    private String synopsis;
 
     public MovieItem(String imgUrl, String title, String releaseDate, float rating, String synopsis) {
         this.imgUrl = imgUrl;
         this.title = title;
         this.releaseDate = releaseDate;
         this.rating = rating;
+        this.ratingText = String.valueOf(rating);
         this.synopsis = synopsis;
     }
 
@@ -29,6 +31,7 @@ public class MovieItem implements Parcelable {
         title = in.readString();
         releaseDate = in.readString();
         rating = in.readFloat();
+        ratingText= in.readString();
         synopsis = in.readString();
     }
 
@@ -48,16 +51,8 @@ public class MovieItem implements Parcelable {
         return imgUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getReleaseDate() {
@@ -72,16 +67,12 @@ public class MovieItem implements Parcelable {
         return rating;
     }
 
-    public void setRating(float rating) {
-        this.rating = rating;
+    public String getRatingText() {
+        return ratingText;
     }
 
     public String getSynopsis() {
         return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
     }
 
     @Override
@@ -95,6 +86,7 @@ public class MovieItem implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(releaseDate);
         parcel.writeFloat(rating);
+        parcel.writeString(ratingText);
         parcel.writeString(synopsis);
     }
 }
