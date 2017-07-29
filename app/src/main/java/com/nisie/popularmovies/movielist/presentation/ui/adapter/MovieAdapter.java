@@ -1,5 +1,6 @@
 package com.nisie.popularmovies.movielist.presentation.ui.adapter;
 
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public boolean isLoading() {
         return loading == 1;
+    }
+
+    public ArrayList<MovieItem> getList() {
+        return listMovie;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

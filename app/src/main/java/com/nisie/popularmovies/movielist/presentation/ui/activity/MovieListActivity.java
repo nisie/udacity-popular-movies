@@ -30,6 +30,7 @@ public class MovieListActivity extends AppCompatActivity
 
     private static final int GRID_SPAN = 3;
     private static final int DEFAULT_NO_SORT = 0;
+    private static final String ARGS_DATA = "ARGS_DATA";
     RecyclerView rvMovie;
     GridLayoutManager layoutManager;
     MovieAdapter adapter;
@@ -39,9 +40,16 @@ public class MovieListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initView();
         initPresenter();
-        initData();
+        initData(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(ARGS_DATA, adapter.getList());
     }
 
     @Override
@@ -64,8 +72,13 @@ public class MovieListActivity extends AppCompatActivity
                 this, getMovieListUseCase);
     }
 
-    private void initData() {
-        presenter.getMovieList();
+    private void initData(Bundle savedInstanceState) {
+        if (savedInstanceState != null
+                && savedInstanceState.getParcelableArrayList(ARGS_DATA) != null) {
+            onSuccessGetMovieList(savedInstanceState.<MovieItem>getParcelableArrayList(ARGS_DATA));
+        } else {
+            presenter.getMovieList();
+        }
     }
 
     private void initView() {
