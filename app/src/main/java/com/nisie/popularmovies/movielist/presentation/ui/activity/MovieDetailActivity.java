@@ -6,6 +6,8 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -27,6 +29,8 @@ import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewMode
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenterImpl;
 
+import static android.R.attr.id;
+
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailPresenter.View {
 
     private static final String ARGS_MOVIE = "ARGS_MOVIE";
@@ -37,6 +41,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     MovieItem movieItem;
     MovieDetailPresenter presenter;
     ActivityMovieDetailBinding binding;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +122,36 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_movie_detail, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.favorite:
+                onFavoriteClicked(item);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void onFavoriteClicked(MenuItem item) {
+        if (item.getTitle().equals(getResources().getString(R.string.favorite))) {
+            item.setTitle(getResources().getString(R.string.favorited));
+            item.setIcon(getResources().getDrawable(R.drawable.ic_star_black_24dp));
+        } else {
+            item.setTitle(getResources().getString(R.string.favorite));
+            item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
+        }
     }
 
     public static Intent getCallingIntent(Context context, MovieItem movieItem) {
@@ -135,12 +162,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public void showLoadingTrailers() {
-        reviewView.setVisibility(View.GONE);
+        trailerView.setVisibility(View.GONE);
     }
 
     @Override
     public void onErrorGetTrailer(int resId) {
-
+        trailerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -151,16 +178,18 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public void finishLoadingTrailer() {
+        trailerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showLoadingReviews() {
+        reviewView.setVisibility(View.GONE);
 
     }
 
     @Override
     public void onErrorGetReviews(int resId) {
-
+        reviewView.setVisibility(View.GONE);
     }
 
     @Override
