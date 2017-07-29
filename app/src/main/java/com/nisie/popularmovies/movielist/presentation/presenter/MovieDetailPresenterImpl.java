@@ -2,6 +2,7 @@ package com.nisie.popularmovies.movielist.presentation.presenter;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.SQLException;
 import android.graphics.Movie;
 import android.net.Uri;
 import android.util.Log;
@@ -74,7 +75,14 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
     @Override
     public void removeFavorite(ContentResolver contentResolver, int id) {
-
+        try {
+            int delete = contentResolver.delete(MovieContract.MovieEntry.CONTENT_URI,
+                    MovieContract.MovieEntry.COLUMN_ID + " =?",
+                    new String[]{String.valueOf(id)});
+            Log.d(MovieDetailPresenterImpl.class.getSimpleName(), delete + "");
+        } catch (SQLException e) {
+            Log.e(MovieDetailPresenterImpl.class.getSimpleName(), e.toString());
+        }
     }
 
 

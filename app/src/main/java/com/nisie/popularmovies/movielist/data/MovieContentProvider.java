@@ -11,9 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-
-import static android.R.attr.id;
 
 /**
  * @author by nisie on 7/29/17.
@@ -110,8 +107,23 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[]
+            selectionArgs) {
+        db = dbHelper.getWritableDatabase();
+
+        int match = uriMatcher.match(uri);
+        int deleteCount;
+        switch (match) {
+            case MOVIES:
+                deleteCount = db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return deleteCount;
     }
 
     @Override
