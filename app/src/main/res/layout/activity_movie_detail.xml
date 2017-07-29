@@ -9,11 +9,6 @@
         <variable
             name="movie"
             type="com.nisie.popularmovies.movielist.presentation.model.MovieItem"/>
-
-        <variable
-            name="reviewList"
-            type="com.nisie.popularmovies.movielist.presentation.model.ReviewViewModel"/>
-
     </data>
 
     <ScrollView
@@ -89,39 +84,54 @@
                 android:text="@{movie.synopsis}"
                 tools:text="This is long synopsis"/>
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/view_trailer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_gap"
-                android:text="@string/see_trailer"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"/>
+                android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_trailers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                app:fastScrollEnabled="false"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_gap"
+                    android:text="@string/see_trailer"
+                    android:textSize="@dimen/font_large"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_gap"
-                android:text="@string/see_reviews"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_trailers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:layout_marginRight="@dimen/default_gap"
+                    app:fastScrollEnabled="false"
+                    bind:items="@{movie.listTrailer}"/>
+            </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_reviews"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/view_review"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                app:fastScrollEnabled="false"
-                bind:items="@{reviewList.listReview}"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_gap"
+                    android:text="@string/see_reviews"
+                    android:textSize="@dimen/font_large"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:layout_marginRight="@dimen/default_gap"
+                    app:fastScrollEnabled="false"
+                    bind:items="@{movie.listReview}"/>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

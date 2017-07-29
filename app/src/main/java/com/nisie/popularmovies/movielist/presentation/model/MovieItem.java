@@ -1,11 +1,8 @@
 package com.nisie.popularmovies.movielist.presentation.model;
 
+import android.databinding.ObservableArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.Date;
-
-import static android.R.attr.id;
 
 /**
  * @author by natha on 6/26/2017.
@@ -19,6 +16,9 @@ public class MovieItem implements Parcelable {
     private String ratingText;
     private String synopsis;
     private int id;
+    private ObservableArrayList<MovieReviewViewModel> listReview = new ObservableArrayList<>();
+    private ObservableArrayList<MovieTrailerViewModel> listTrailer = new ObservableArrayList<>();
+
 
     public MovieItem(int id, String imgUrl, String title, String releaseDate, float rating,
                      String synopsis) {
@@ -29,19 +29,21 @@ public class MovieItem implements Parcelable {
         this.rating = rating;
         this.ratingText = String.valueOf(rating);
         this.synopsis = synopsis;
+        this.listReview = new ObservableArrayList<>();
+        this.listTrailer = new ObservableArrayList<>();
     }
 
     protected MovieItem(Parcel in) {
-        id = in.readInt();
         imgUrl = in.readString();
         title = in.readString();
         releaseDate = in.readString();
         rating = in.readFloat();
-        ratingText= in.readString();
+        ratingText = in.readString();
         synopsis = in.readString();
+        id = in.readInt();
     }
 
-    public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
+    public static final Creator<MovieItem> CREATOR = new Creator<MovieItem>() {
         @Override
         public MovieItem createFromParcel(Parcel in) {
             return new MovieItem(in);
@@ -52,6 +54,16 @@ public class MovieItem implements Parcelable {
             return new MovieItem[size];
         }
     };
+
+    public void setListReview(ObservableArrayList<MovieReviewViewModel> listReview) {
+        this.listReview.clear();
+        this.listReview.addAll(listReview);
+    }
+
+    public void setListTrailer(ObservableArrayList<MovieTrailerViewModel> listTrailer) {
+        this.listTrailer.clear();
+        this.listTrailer.addAll(listTrailer);
+    }
 
     public String getImgUrl() {
         return imgUrl;
@@ -81,6 +93,18 @@ public class MovieItem implements Parcelable {
         return synopsis;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public ObservableArrayList<MovieReviewViewModel> getListReview() {
+        return listReview;
+    }
+
+    public ObservableArrayList<MovieTrailerViewModel> getListTrailer() {
+        return listTrailer;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -88,16 +112,12 @@ public class MovieItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
         parcel.writeString(imgUrl);
         parcel.writeString(title);
         parcel.writeString(releaseDate);
         parcel.writeFloat(rating);
         parcel.writeString(ratingText);
         parcel.writeString(synopsis);
-    }
-
-    public int getId() {
-        return id;
+        parcel.writeInt(id);
     }
 }

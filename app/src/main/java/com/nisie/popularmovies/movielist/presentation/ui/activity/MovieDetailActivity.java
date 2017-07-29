@@ -3,11 +3,11 @@ package com.nisie.popularmovies.movielist.presentation.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.databinding.ActivityMovieDetailBinding;
@@ -22,23 +22,21 @@ import com.nisie.popularmovies.movielist.domain.network.service.MovieService;
 import com.nisie.popularmovies.movielist.domain.repository.MovieListRepository;
 import com.nisie.popularmovies.movielist.domain.repository.MovieListRepositoryImpl;
 import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
+import com.nisie.popularmovies.movielist.presentation.model.MovieReviewViewModel;
 import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewModel;
-import com.nisie.popularmovies.movielist.presentation.model.ReviewViewModel;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenterImpl;
-import com.nisie.popularmovies.movielist.presentation.ui.adapter.ReviewsAdapter;
-import com.nisie.popularmovies.movielist.presentation.ui.adapter.TrailerAdapter;
-
-import java.util.ArrayList;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailPresenter.View {
 
     private static final String ARGS_MOVIE = "ARGS_MOVIE";
 
+    View reviewView;
+    View trailerView;
+
     MovieItem movieItem;
     MovieDetailPresenter presenter;
     ActivityMovieDetailBinding binding;
-    ReviewViewModel reviewViewModel = new ReviewViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +98,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             String date = getString(R.string.release_date) + movieItem.getReleaseDate();
             movieItem.setReleaseDate(date);
             binding.setMovie(movieItem);
-            binding.setReviewList(reviewViewModel);
 
             presenter.getTrailers(movieItem.getId());
             presenter.getReviews(movieItem.getId());
@@ -114,6 +111,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        reviewView = findViewById(R.id.view_review);
+        trailerView = findViewById(R.id.view_trailer);
     }
 
     @Override
@@ -135,6 +135,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public void showLoadingTrailers() {
+        reviewView.setVisibility(View.GONE);
     }
 
     @Override
@@ -143,8 +144,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
-    public void onSuccessGetTrailer(ArrayList<MovieTrailerViewModel> movieTrailerViewModels) {
-
+    public void onSuccessGetTrailer(ObservableArrayList<MovieTrailerViewModel> movieTrailerViewModels) {
+        this.movieItem.setListTrailer(movieTrailerViewModels);
+        binding.notifyPropertyChanged(R.id.rv_trailers);
     }
 
     @Override
@@ -162,12 +164,13 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
-    public void onSuccessGetReviews(ReviewViewModel reviewViewModel) {
-        this.reviewViewModel.setReviewList(reviewViewModel.getListReview());
+    public void onSuccessGetReviews(ObservableArrayList<MovieReviewViewModel> reviewViewModel) {
+        this.movieItem.setListReview(reviewViewModel);
         binding.notifyPropertyChanged(R.id.rv_reviews);
     }
 
     @Override
     public void finishLoadingReviews() {
+        reviewView.setVisibility(View.VISIBLE);
     }
 }

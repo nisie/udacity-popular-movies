@@ -6,15 +6,9 @@ import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.movielist.domain.model.MovieReviewItemDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieReviewsDomain;
 import com.nisie.popularmovies.movielist.presentation.model.MovieReviewViewModel;
-import com.nisie.popularmovies.movielist.presentation.model.ReviewViewModel;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import rx.Subscriber;
-
-import static android.R.transition.move;
 
 /**
  * @author by nisie on 7/29/17.
@@ -46,13 +40,7 @@ public class GetMovieReviewsSubscriber extends Subscriber<MovieReviewsDomain> {
 
     }
 
-    private ReviewViewModel convertToViewModel(
-            MovieReviewsDomain movieReviewsDomain) {
-        return new ReviewViewModel(convertToList(movieReviewsDomain));
-
-    }
-
-    private ObservableArrayList<MovieReviewViewModel> convertToList(MovieReviewsDomain movieReviewsDomain) {
+    private ObservableArrayList<MovieReviewViewModel> convertToViewModel(MovieReviewsDomain movieReviewsDomain) {
         ObservableArrayList<MovieReviewViewModel> listReview = new ObservableArrayList<>();
         for (MovieReviewItemDomain domain : movieReviewsDomain.getResults()) {
             listReview.add(new MovieReviewViewModel(

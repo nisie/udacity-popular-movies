@@ -1,9 +1,15 @@
 package com.nisie.popularmovies.movielist.presentation.ui.adapter;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableArrayList;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.nisie.popularmovies.databinding.ItemReviewBinding;
 import com.nisie.popularmovies.movielist.presentation.model.MovieReviewViewModel;
@@ -18,10 +24,12 @@ import java.util.ArrayList;
 public class ReviewsAdapter extends BaseRecyclerViewAdapter {
 
     private static final int TYPE_REVIEW = 102;
+    private final Context context;
     private ArrayList<MovieReviewViewModel> list;
 
-    public ReviewsAdapter(ObservableArrayList<MovieReviewViewModel> list) {
+    public ReviewsAdapter(Context context, ObservableArrayList<MovieReviewViewModel> list) {
         this.list = list;
+        this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,4 +80,7 @@ public class ReviewsAdapter extends BaseRecyclerViewAdapter {
             return TYPE_REVIEW;
     }
 
+    public void onItemClick(MovieReviewViewModel item) {
+
+    }
 }

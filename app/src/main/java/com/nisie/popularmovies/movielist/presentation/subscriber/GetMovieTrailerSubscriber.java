@@ -1,8 +1,11 @@
 package com.nisie.popularmovies.movielist.presentation.subscriber;
 
+import android.databinding.ObservableArrayList;
+
 import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.movielist.domain.model.MovieTrailerDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieTrailerItemDomain;
+import com.nisie.popularmovies.movielist.presentation.model.MovieReviewViewModel;
 import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewModel;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
 
@@ -41,8 +44,8 @@ public class GetMovieTrailerSubscriber extends Subscriber<MovieTrailerDomain> {
         viewListener.onSuccessGetTrailer(convertToViewModel(movieTrailerDomain));
     }
 
-    private ArrayList<MovieTrailerViewModel> convertToViewModel(MovieTrailerDomain movieTrailerDomain) {
-        ArrayList<MovieTrailerViewModel> listModel = new ArrayList<>();
+    private ObservableArrayList<MovieTrailerViewModel> convertToViewModel(MovieTrailerDomain movieTrailerDomain) {
+        ObservableArrayList<MovieTrailerViewModel> listModel = new ObservableArrayList<>();
         for (MovieTrailerItemDomain domain : movieTrailerDomain.getListTrailer()) {
             listModel.add(new MovieTrailerViewModel(
                     convertToVideoUrl(domain.getKey()),
@@ -55,11 +58,11 @@ public class GetMovieTrailerSubscriber extends Subscriber<MovieTrailerDomain> {
     }
 
     private String convertToThumbnailUrl(String key) {
-        return YOUTUBE_IMAGE;
+        return YOUTUBE_IMAGE + key + DEFAULT_IMAGE;
     }
 
     private String convertToVideoUrl(String key) {
-        return YOUTUBE_VIDEO + key + DEFAULT_IMAGE;
+        return YOUTUBE_VIDEO + key;
     }
 
 }

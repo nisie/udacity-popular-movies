@@ -21,7 +21,7 @@ public class DataBindingHelper {
             list) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         view.setLayoutManager(layoutManager);
-        view.setAdapter(new ReviewsAdapter(list));
+        view.setAdapter(new ReviewsAdapter(view.getContext(), list));
     }
 
     @BindingAdapter("bind:items")
@@ -29,6 +29,6 @@ public class DataBindingHelper {
             list) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         view.setLayoutManager(layoutManager);
-        view.setAdapter(new TrailerAdapter(list));
+        view.setAdapter(new TrailerAdapter(view.getContext(), list));
     }
 }
