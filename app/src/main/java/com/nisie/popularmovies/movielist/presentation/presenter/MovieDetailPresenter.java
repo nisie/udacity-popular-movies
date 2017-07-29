@@ -22,6 +22,8 @@ public interface MovieDetailPresenter extends BasePresenter{
 
     void removeFavorite(ContentResolver contentResolver, int id);
 
+    void checkIsFavorite(int id);
+
 
     interface View {
 
@@ -41,6 +43,7 @@ public interface MovieDetailPresenter extends BasePresenter{
 
         void finishLoadingReviews();
 
+        void onIsFavorited();
     }
 
 }

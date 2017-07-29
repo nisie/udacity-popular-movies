@@ -17,6 +17,7 @@ import rx.Observable;
  */
 
 public class GetFavoritedMoviesUseCase extends UseCase<ArrayList<MovieItem>> {
+    public static final String ID = "id";
     private final MovieListRepository repository;
 
     public GetFavoritedMoviesUseCase(ThreadExecutor threadExecutor,
@@ -29,10 +30,16 @@ public class GetFavoritedMoviesUseCase extends UseCase<ArrayList<MovieItem>> {
 
     @Override
     public Observable<ArrayList<MovieItem>> createObservable(Map<String, Object> requestParams) {
-        return repository.getFavoritedMovies();
+        return repository.getFavoritedMovies(requestParams);
     }
 
     public static Map<String, Object> makeParam() {
         return new HashMap<>();
+    }
+
+    public static Map<String, Object> makeParam(String id) {
+        Map<String, Object> param = new HashMap<>();
+        param.put(GetFavoritedMoviesUseCase.ID, id);
+        return param;
     }
 }

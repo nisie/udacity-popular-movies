@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.databinding.ActivityMovieDetailBinding;
 import com.nisie.popularmovies.main.domain.executor.JobExecutor;
 import com.nisie.popularmovies.main.presentation.UIThread;
+import com.nisie.popularmovies.movielist.domain.interactor.GetFavoritedMoviesUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieReviewsUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieTrailerUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
@@ -67,9 +69,15 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 new UIThread(),
                 repository);
 
+        GetFavoritedMoviesUseCase getFavoritedMoviesUseCase = new GetFavoritedMoviesUseCase(
+                new JobExecutor(),
+                new UIThread(),
+                repository);
+
         presenter = new MovieDetailPresenterImpl(this,
                 getMovieTrailerUseCase,
-                getMovieReviewsUseCase);
+                getMovieReviewsUseCase,
+                getFavoritedMoviesUseCase);
     }
 
     @Override
@@ -125,6 +133,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_movie_detail, menu);
         this.menu = menu;
+        presenter.checkIsFavorite(movieItem.getId());
         return true;
     }
 
@@ -145,15 +154,23 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     private void onFavoriteClicked(MenuItem item) {
         if (item.getTitle().equals(getResources().getString(R.string.favorite))) {
-            item.setTitle(getResources().getString(R.string.favorited));
-            item.setIcon(getResources().getDrawable(R.drawable.ic_star_white_24dp));
+            setFavorite(item);
             presenter.addFavorite(getContentResolver(), movieItem);
         } else {
-            item.setTitle(getResources().getString(R.string.favorite));
-            item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_white_24dp));
+            setUnfavorite(item);
             presenter.removeFavorite(getContentResolver(), movieItem.getId());
 
         }
+    }
+
+    private void setFavorite(MenuItem item) {
+        item.setTitle(getResources().getString(R.string.favorited));
+        item.setIcon(getResources().getDrawable(R.drawable.ic_star_white_24dp));
+    }
+
+    private void setUnfavorite(MenuItem item) {
+        item.setTitle(getResources().getString(R.string.favorite));
+        item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_white_24dp));
     }
 
     public static Intent getCallingIntent(Context context, MovieItem movieItem) {
@@ -203,5 +220,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void finishLoadingReviews() {
         reviewView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onIsFavorited() {
+        MenuItem favorite = menu.findItem(R.id.favorite);
+        setFavorite(favorite);
     }
 }

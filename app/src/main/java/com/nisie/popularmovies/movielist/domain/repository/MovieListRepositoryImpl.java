@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.nisie.popularmovies.movielist.data.MovieContract;
+import com.nisie.popularmovies.movielist.domain.interactor.GetFavoritedMoviesUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieTrailerUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieReviewMapper;
@@ -87,8 +88,8 @@ public class MovieListRepositoryImpl implements MovieListRepository {
     }
 
     @Override
-    public Observable<ArrayList<MovieItem>> getFavoritedMovies() {
-        return Observable.just(getFavoriteMovieCursor())
+    public Observable<ArrayList<MovieItem>> getFavoritedMovies(Map<String, Object> requestParams) {
+        return Observable.just(getFavoriteMovieCursor(requestParams))
                 .flatMap(new Func1<Cursor, Observable<ArrayList<MovieItem>>>() {
                     @Override
                     public Observable<ArrayList<MovieItem>> call(Cursor cursor) {
@@ -122,12 +123,21 @@ public class MovieListRepositoryImpl implements MovieListRepository {
                 });
     }
 
-    private Cursor getFavoriteMovieCursor() {
-        return context.getContentResolver().query(
-                MovieContract.MovieEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
+    private Cursor getFavoriteMovieCursor(Map<String, Object> requestParams) {
+        if (requestParams.containsKey(GetFavoritedMoviesUseCase.ID)) {
+            return context.getContentResolver().query(
+                    MovieContract.MovieEntry.CONTENT_URI,
+                    null,
+                    MovieContract.MovieEntry.COLUMN_ID + "=?",
+                    new String[]{String.valueOf(requestParams.get(GetFavoritedMoviesUseCase.ID))},
+                    null);
+        } else {
+            return context.getContentResolver().query(
+                    MovieContract.MovieEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null);
+        }
     }
 }

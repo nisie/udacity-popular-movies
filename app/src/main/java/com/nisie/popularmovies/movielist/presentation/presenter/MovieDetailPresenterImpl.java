@@ -8,9 +8,11 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.nisie.popularmovies.movielist.data.MovieContract;
+import com.nisie.popularmovies.movielist.domain.interactor.GetFavoritedMoviesUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieReviewsUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieTrailerUseCase;
 import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
+import com.nisie.popularmovies.movielist.presentation.subscriber.CheckIsFavoriteSubscriber;
 import com.nisie.popularmovies.movielist.presentation.subscriber.GetMovieReviewsSubscriber;
 import com.nisie.popularmovies.movielist.presentation.subscriber.GetMovieTrailerSubscriber;
 
@@ -25,14 +27,17 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private final View viewListener;
     private final GetMovieTrailerUseCase getMovieTrailerUseCase;
     private final GetMovieReviewsUseCase getMovieReviewsUseCase;
+    private final GetFavoritedMoviesUseCase getFavoritedMoviesUseCase;
 
-    public MovieDetailPresenterImpl(MovieDetailPresenter.View viewListener,
+    public MovieDetailPresenterImpl(View viewListener,
                                     GetMovieTrailerUseCase getMovieTrailerUseCase,
-                                    GetMovieReviewsUseCase getMovieReviewsUseCase) {
+                                    GetMovieReviewsUseCase getMovieReviewsUseCase,
+                                    GetFavoritedMoviesUseCase getFavoritedMoviesUseCase) {
 
         this.viewListener = viewListener;
         this.getMovieTrailerUseCase = getMovieTrailerUseCase;
         this.getMovieReviewsUseCase = getMovieReviewsUseCase;
+        this.getFavoritedMoviesUseCase = getFavoritedMoviesUseCase;
 
     }
 
@@ -40,6 +45,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     public void unbind() {
         getMovieReviewsUseCase.unsubscribe();
         getMovieTrailerUseCase.unsubscribe();
+        getFavoritedMoviesUseCase.unsubscribe();
     }
 
     @Override
@@ -83,6 +89,12 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         } catch (SQLException e) {
             Log.e(MovieDetailPresenterImpl.class.getSimpleName(), e.toString());
         }
+    }
+
+    @Override
+    public void checkIsFavorite(int id) {
+        getFavoritedMoviesUseCase.execute(GetFavoritedMoviesUseCase.makeParam(String.valueOf(id))
+                , new CheckIsFavoriteSubscriber(viewListener));
     }
 
 

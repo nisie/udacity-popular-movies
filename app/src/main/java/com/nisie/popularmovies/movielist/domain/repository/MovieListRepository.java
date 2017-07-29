@@ -26,5 +26,5 @@ public interface MovieListRepository {
 
     Observable<MovieReviewsDomain> getMovieReviews(Map<String, Object> requestParams);
 
-    Observable<ArrayList<MovieItem>> getFavoritedMovies();
+    Observable<ArrayList<MovieItem>> getFavoritedMovies(Map<String, Object> requestParams);
 }

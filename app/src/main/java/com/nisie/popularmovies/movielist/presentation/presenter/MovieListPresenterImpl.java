@@ -39,6 +39,7 @@ public class MovieListPresenterImpl
     @Override
     public void unbind() {
         getMovieListUseCase.unsubscribe();
+        getFavoritedMoviesUseCase.unsubscribe();
     }
 
     @Override
