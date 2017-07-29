@@ -1,8 +1,10 @@
 package com.nisie.popularmovies.movielist.presentation.presenter;
 
+import android.content.ContentResolver;
 import android.databinding.ObservableArrayList;
 
 import com.nisie.popularmovies.main.presentation.BasePresenter;
+import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
 import com.nisie.popularmovies.movielist.presentation.model.MovieReviewViewModel;
 import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewModel;
 
@@ -15,6 +17,10 @@ public interface MovieDetailPresenter extends BasePresenter{
     void getTrailers(int id);
 
     void getReviews(int id);
+
+    void addFavorite(ContentResolver contentResolver, MovieItem movieItem);
+
+    void removeFavorite(ContentResolver contentResolver, int id);
 
 
     interface View {

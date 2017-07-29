@@ -1,5 +1,9 @@
 package com.nisie.popularmovies.movielist.domain.repository;
 
+import android.content.Context;
+import android.database.Cursor;
+
+import com.nisie.popularmovies.movielist.data.MovieContract;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieTrailerUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieReviewMapper;
@@ -8,10 +12,13 @@ import com.nisie.popularmovies.movielist.domain.model.MovieResultDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieReviewsDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieTrailerDomain;
 import com.nisie.popularmovies.movielist.domain.network.service.MovieService;
+import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import rx.Observable;
+import rx.functions.Func1;
 
 
 /**
@@ -24,13 +31,15 @@ public class MovieListRepositoryImpl implements MovieListRepository {
     private final MovieListMapper movieListMapper;
     private final MovieTrailerMapper movieTrailerMapper;
     private final MovieReviewMapper movieReviewMapper;
+    private Context context;
 
-
-    public MovieListRepositoryImpl(MovieService movieService,
+    public MovieListRepositoryImpl(Context context,
+                                   MovieService movieService,
                                    MovieListMapper movieListMapper,
                                    MovieTrailerMapper movieTrailerMapper,
                                    MovieReviewMapper movieReviewMapper
     ) {
+        this.context = context;
         this.movieService = movieService;
         this.movieListMapper = movieListMapper;
         this.movieTrailerMapper = movieTrailerMapper;
@@ -75,5 +84,50 @@ public class MovieListRepositoryImpl implements MovieListRepository {
                         String.valueOf(requestParams.get(GetMovieTrailerUseCase.ID)),
                         requestParams)
                 .map(movieReviewMapper);
+    }
+
+    @Override
+    public Observable<ArrayList<MovieItem>> getFavoritedMovies() {
+        return Observable.just(getFavoriteMovieCursor())
+                .flatMap(new Func1<Cursor, Observable<ArrayList<MovieItem>>>() {
+                    @Override
+                    public Observable<ArrayList<MovieItem>> call(Cursor cursor) {
+                        ArrayList<MovieItem> list = new ArrayList<>();
+                        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                            list.add(
+                                    new MovieItem(
+                                            cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry
+                                                    .COLUMN_ID)),
+                                            cursor.getString(cursor.getColumnIndex(MovieContract
+                                                    .MovieEntry
+                                                    .COLUMN_IMAGE)),
+                                            cursor.getString(cursor.getColumnIndex(MovieContract
+                                                    .MovieEntry
+                                                    .COLUMN_TITLE)),
+                                            cursor.getString(cursor.getColumnIndex(MovieContract
+                                                    .MovieEntry
+                                                    .COLUMN_RELEASE_DATE)),
+                                            cursor.getFloat(cursor.getColumnIndex(MovieContract
+                                                    .MovieEntry
+                                                    .COLUMN_RATING)),
+                                            cursor.getString(cursor.getColumnIndex(MovieContract
+                                                    .MovieEntry
+                                                    .COLUMN_SYNOPSIS))
+
+                                    )
+                            );
+                        }
+                        return Observable.just(list);
+                    }
+                });
+    }
+
+    private Cursor getFavoriteMovieCursor() {
+        return context.getContentResolver().query(
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
     }
 }

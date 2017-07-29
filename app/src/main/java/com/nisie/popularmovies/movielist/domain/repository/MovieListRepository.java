@@ -3,7 +3,9 @@ package com.nisie.popularmovies.movielist.domain.repository;
 import com.nisie.popularmovies.movielist.domain.model.MovieResultDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieReviewsDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieTrailerDomain;
+import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import rx.Observable;
@@ -23,4 +25,6 @@ public interface MovieListRepository {
     Observable<MovieTrailerDomain> getMovieTrailers(Map<String, Object> requestParams);
 
     Observable<MovieReviewsDomain> getMovieReviews(Map<String, Object> requestParams);
+
+    Observable<ArrayList<MovieItem>> getFavoritedMovies();
 }

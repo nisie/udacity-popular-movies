@@ -52,6 +52,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     private void initPresenter() {
 
         MovieListRepository repository = new MovieListRepositoryImpl(
+                this,
                 new MovieService(),
                 new MovieListMapper(),
                 new MovieTrailerMapper(),
@@ -146,9 +147,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         if (item.getTitle().equals(getResources().getString(R.string.favorite))) {
             item.setTitle(getResources().getString(R.string.favorited));
             item.setIcon(getResources().getDrawable(R.drawable.ic_star_white_24dp));
+            presenter.addFavorite(getContentResolver(), movieItem);
         } else {
             item.setTitle(getResources().getString(R.string.favorite));
             item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_white_24dp));
+            presenter.removeFavorite(getContentResolver(), movieItem.getId());
+
         }
     }
 

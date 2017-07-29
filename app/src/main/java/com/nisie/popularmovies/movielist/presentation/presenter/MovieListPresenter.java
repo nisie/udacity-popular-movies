@@ -1,5 +1,7 @@
 package com.nisie.popularmovies.movielist.presentation.presenter;
 
+import android.content.ContentResolver;
+
 import com.nisie.popularmovies.main.presentation.BasePresenter;
 import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
 
@@ -18,6 +20,8 @@ public interface MovieListPresenter extends BasePresenter{
     void getMostPopular();
 
     void loadMore(int lastItemPosition, int visibleItem);
+
+    void getFavorited(ContentResolver contentResolver);
 
     interface View {
 

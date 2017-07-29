@@ -13,6 +13,7 @@ import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.main.domain.executor.JobExecutor;
 import com.nisie.popularmovies.main.presentation.UIThread;
 import com.nisie.popularmovies.main.presentation.util.SpacesItemDecoration;
+import com.nisie.popularmovies.movielist.domain.interactor.GetFavoritedMoviesUseCase;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieListUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieReviewMapper;
@@ -64,6 +65,7 @@ public class MovieListActivity extends AppCompatActivity
     private void initPresenter() {
 
         MovieListRepository repository = new MovieListRepositoryImpl(
+                this,
                 new MovieService(),
                 new MovieListMapper(),
                 new MovieTrailerMapper(),
@@ -72,8 +74,12 @@ public class MovieListActivity extends AppCompatActivity
                 new JobExecutor(),
                 new UIThread(),
                 repository);
+        GetFavoritedMoviesUseCase getFavoritedMoviesUseCase = new GetFavoritedMoviesUseCase(
+                new JobExecutor(),
+                new UIThread(),
+                repository);
         presenter = new MovieListPresenterImpl(
-                this, getMovieListUseCase);
+                this, getMovieListUseCase, getFavoritedMoviesUseCase);
     }
 
     private void initData(Bundle savedInstanceState) {
@@ -125,6 +131,10 @@ public class MovieListActivity extends AppCompatActivity
             case R.id.sort_most_popular:
                 adapter.clearList();
                 presenter.getMostPopular();
+                return true;
+            case R.id.favorite:
+                adapter.clearList();
+                presenter.getFavorited(getContentResolver());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
