@@ -29,8 +29,6 @@ import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewMode
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
 import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenterImpl;
 
-import static android.R.attr.id;
-
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailPresenter.View {
 
     private static final String ARGS_MOVIE = "ARGS_MOVIE";
@@ -147,10 +145,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     private void onFavoriteClicked(MenuItem item) {
         if (item.getTitle().equals(getResources().getString(R.string.favorite))) {
             item.setTitle(getResources().getString(R.string.favorited));
-            item.setIcon(getResources().getDrawable(R.drawable.ic_star_black_24dp));
+            item.setIcon(getResources().getDrawable(R.drawable.ic_star_white_24dp));
         } else {
             item.setTitle(getResources().getString(R.string.favorite));
-            item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
+            item.setIcon(getResources().getDrawable(R.drawable.ic_star_border_white_24dp));
         }
     }
 
