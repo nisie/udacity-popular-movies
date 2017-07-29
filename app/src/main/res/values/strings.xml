@@ -8,6 +8,6 @@
     <string name="release_date">Release Date : </string>
     <string name="see_trailer">Trailers</string>
     <string name="see_reviews">Reviews</string>
-    <string name="favorite">favorite</string>
-    <string name="favorited">favorited</string>
+    <string name="favorite">Favorites</string>
+    <string name="favorited">Favorited</string>
 </resources>
