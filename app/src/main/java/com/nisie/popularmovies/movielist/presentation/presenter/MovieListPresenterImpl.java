@@ -23,6 +23,11 @@ public class MovieListPresenterImpl
     }
 
     @Override
+    public void unbind() {
+        getMovieListUseCase.unsubscribe();
+    }
+
+    @Override
     public void getMovieList() {
         viewListener.showLoading();
         getMovieListUseCase.execute(GetMovieListUseCase.makeParam(currentPage),
@@ -48,4 +53,6 @@ public class MovieListPresenterImpl
         currentPage += 1;
         getMovieList();
     }
+
+
 }

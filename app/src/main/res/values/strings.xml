@@ -6,4 +6,6 @@
     <string name="movie_thumbnail">Movie Thumbnail</string>
     <string name="default_error">Failed to retrieve data, please try again.</string>
     <string name="release_date">Release Date : </string>
+    <string name="see_trailer">Trailers</string>
+    <string name="see_reviews">Reviews</string>
 </resources>

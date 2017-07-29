@@ -3,6 +3,7 @@ package com.nisie.popularmovies.movielist.domain.interactor;
 import com.nisie.popularmovies.main.presentation.UseCase;
 import com.nisie.popularmovies.main.domain.executor.PostExecutionThread;
 import com.nisie.popularmovies.main.domain.executor.ThreadExecutor;
+import com.nisie.popularmovies.movielist.domain.APICONSTANT;
 import com.nisie.popularmovies.movielist.domain.model.MovieResultDomain;
 import com.nisie.popularmovies.movielist.domain.repository.MovieListRepository;
 
@@ -11,14 +12,13 @@ import java.util.Map;
 
 import rx.Observable;
 
+import static android.provider.Contacts.SettingsColumns.KEY;
+
 /**
  * @author by natha on 6/27/2017.
  */
 
-public class GetMovieListUseCase extends UseCase<MovieResultDomain> {
-
-    private static final String API_KEY = "api_key";
-    private static final String KEY = "e355e388ec3a7934853ad2a2557f2b05";
+public class GetMovieListUseCase extends UseCase<MovieResultDomain> implements APICONSTANT {
 
     private static final String SORT_BY = "sort_by";
     private static final Object HIGHEST_RATED = "vote_average.desc";

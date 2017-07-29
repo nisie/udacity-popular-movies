@@ -15,6 +15,8 @@ import com.nisie.popularmovies.main.presentation.UIThread;
 import com.nisie.popularmovies.main.presentation.util.SpacesItemDecoration;
 import com.nisie.popularmovies.movielist.domain.interactor.GetMovieListUseCase;
 import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
+import com.nisie.popularmovies.movielist.domain.mapper.MovieReviewMapper;
+import com.nisie.popularmovies.movielist.domain.mapper.MovieTrailerMapper;
 import com.nisie.popularmovies.movielist.domain.network.service.MovieService;
 import com.nisie.popularmovies.movielist.domain.repository.MovieListRepository;
 import com.nisie.popularmovies.movielist.domain.repository.MovieListRepositoryImpl;
@@ -63,7 +65,9 @@ public class MovieListActivity extends AppCompatActivity
 
         MovieListRepository repository = new MovieListRepositoryImpl(
                 new MovieService(),
-                new MovieListMapper());
+                new MovieListMapper(),
+                new MovieTrailerMapper(),
+                new MovieReviewMapper());
         GetMovieListUseCase getMovieListUseCase = new GetMovieListUseCase(
                 new JobExecutor(),
                 new UIThread(),
@@ -147,5 +151,11 @@ public class MovieListActivity extends AppCompatActivity
     @Override
     public void showLoading() {
         adapter.showLoading();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.unbind();
     }
 }

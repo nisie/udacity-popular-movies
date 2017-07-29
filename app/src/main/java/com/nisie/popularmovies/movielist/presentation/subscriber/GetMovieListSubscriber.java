@@ -46,7 +46,9 @@ public class GetMovieListSubscriber extends Subscriber<MovieResultDomain> {
     private ArrayList<MovieItem> convertToViewModel(MovieResultDomain movieResultDomain) {
         ArrayList<MovieItem> list = new ArrayList<>();
         for (MovieItemDomain domain : movieResultDomain.getResults()) {
-            list.add(new MovieItem(convertToImageUrl(domain.getPosterPath()),
+            list.add(new MovieItem(
+                    domain.getId(),
+                    convertToImageUrl(domain.getPosterPath()),
                     domain.getTitle(),
                     domain.getReleaseDate(),
                     (float) domain.getVoteAverage(),

@@ -4,4 +4,7 @@
     <dimen name="gap_movie">5dp</dimen>
     <dimen name="poster_height">200dp</dimen>
     <dimen name="poster_detail_height">500dp</dimen>
+    <dimen name="font_large">20sp</dimen>
+    <dimen name="trailer_size">100dp</dimen>
+    <dimen name="gap_small">5dp</dimen>
 </resources>

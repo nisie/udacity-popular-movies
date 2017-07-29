@@ -5,44 +5,107 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.nisie.popularmovies.R;
 import com.nisie.popularmovies.databinding.ActivityMovieDetailBinding;
+import com.nisie.popularmovies.main.domain.executor.JobExecutor;
+import com.nisie.popularmovies.main.presentation.UIThread;
+import com.nisie.popularmovies.movielist.domain.interactor.GetMovieReviewsUseCase;
+import com.nisie.popularmovies.movielist.domain.interactor.GetMovieTrailerUseCase;
+import com.nisie.popularmovies.movielist.domain.mapper.MovieListMapper;
+import com.nisie.popularmovies.movielist.domain.mapper.MovieReviewMapper;
+import com.nisie.popularmovies.movielist.domain.mapper.MovieTrailerMapper;
+import com.nisie.popularmovies.movielist.domain.network.service.MovieService;
+import com.nisie.popularmovies.movielist.domain.repository.MovieListRepository;
+import com.nisie.popularmovies.movielist.domain.repository.MovieListRepositoryImpl;
 import com.nisie.popularmovies.movielist.presentation.model.MovieItem;
+import com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewModel;
+import com.nisie.popularmovies.movielist.presentation.model.ReviewViewModel;
+import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenter;
+import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPresenterImpl;
+import com.nisie.popularmovies.movielist.presentation.ui.adapter.ReviewsAdapter;
+import com.nisie.popularmovies.movielist.presentation.ui.adapter.TrailerAdapter;
 
-public class MovieDetailActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailPresenter.View {
 
     private static final String ARGS_MOVIE = "ARGS_MOVIE";
 
-    ImageView ivMovie;
-    TextView tvTitle;
-    TextView tvDate;
-    TextView tvSynopsis;
-    TextView ratingText;
-    RatingBar rating;
+    MovieItem movieItem;
+    MovieDetailPresenter presenter;
+    ActivityMovieDetailBinding binding;
+    ReviewViewModel reviewViewModel = new ReviewViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        initData();
+        initPresenter();
+        initData(savedInstanceState);
     }
 
-    private void initData() {
+    private void initPresenter() {
+
+        MovieListRepository repository = new MovieListRepositoryImpl(
+                new MovieService(),
+                new MovieListMapper(),
+                new MovieTrailerMapper(),
+                new MovieReviewMapper());
+        GetMovieTrailerUseCase getMovieTrailerUseCase = new GetMovieTrailerUseCase(
+                new JobExecutor(),
+                new UIThread(),
+                repository);
+
+        GetMovieReviewsUseCase getMovieReviewsUseCase = new GetMovieReviewsUseCase(
+                new JobExecutor(),
+                new UIThread(),
+                repository);
+
+        presenter = new MovieDetailPresenterImpl(this,
+                getMovieTrailerUseCase,
+                getMovieReviewsUseCase);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.unbind();
+    }
+
+    public int getLayoutId() {
+        return R.layout.activity_movie_detail;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (movieItem != null)
+            outState.putParcelable(ARGS_MOVIE, movieItem);
+    }
+
+    private void initData(Bundle savedInstanceState) {
         if (getIntent().getExtras() != null
                 && getIntent().getExtras().getParcelable(ARGS_MOVIE) != null) {
-            MovieItem movieItem = getIntent().getExtras().getParcelable(ARGS_MOVIE);
-            if (movieItem != null) {
-                ActivityMovieDetailBinding binding = DataBindingUtil.setContentView(this, getLayoutId());
-                String date = getString(R.string.release_date) + movieItem.getReleaseDate();
-                movieItem.setReleaseDate(date);
-                binding.setMovie(movieItem);
-            }
+            movieItem = getIntent().getExtras().getParcelable(ARGS_MOVIE);
+        } else if (savedInstanceState.getParcelable(ARGS_MOVIE) != null) {
+            movieItem = savedInstanceState.getParcelable(ARGS_MOVIE);
         }
+
+        if (movieItem != null) {
+            binding = DataBindingUtil.setContentView(this, getLayoutId());
+            String date = getString(R.string.release_date) + movieItem.getReleaseDate();
+            movieItem.setReleaseDate(date);
+            binding.setMovie(movieItem);
+            binding.setReviewList(reviewViewModel);
+
+            presenter.getTrailers(movieItem.getId());
+            presenter.getReviews(movieItem.getId());
+        }
+
     }
 
     private void initView() {
@@ -51,13 +114,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-        ivMovie = (ImageView) findViewById(R.id.iv_movie);
-        tvDate = (TextView) findViewById(R.id.tv_date);
-        tvSynopsis = (TextView) findViewById(R.id.tv_synopsis);
-        tvTitle = (TextView) findViewById(R.id.tv_title);
-        rating = (RatingBar) findViewById(R.id.rating);
-        ratingText = (TextView) findViewById(R.id.rating_text);
     }
 
     @Override
@@ -77,7 +133,41 @@ public class MovieDetailActivity extends AppCompatActivity {
         return intent;
     }
 
-    public int getLayoutId() {
-        return R.layout.activity_movie_detail;
+    @Override
+    public void showLoadingTrailers() {
+    }
+
+    @Override
+    public void onErrorGetTrailer(int resId) {
+
+    }
+
+    @Override
+    public void onSuccessGetTrailer(ArrayList<MovieTrailerViewModel> movieTrailerViewModels) {
+
+    }
+
+    @Override
+    public void finishLoadingTrailer() {
+    }
+
+    @Override
+    public void showLoadingReviews() {
+
+    }
+
+    @Override
+    public void onErrorGetReviews(int resId) {
+
+    }
+
+    @Override
+    public void onSuccessGetReviews(ReviewViewModel reviewViewModel) {
+        this.reviewViewModel.setReviewList(reviewViewModel.getListReview());
+        binding.notifyPropertyChanged(R.id.rv_reviews);
+    }
+
+    @Override
+    public void finishLoadingReviews() {
     }
 }

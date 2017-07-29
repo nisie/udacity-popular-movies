@@ -24,7 +24,7 @@ public class MovieItemResult {
     private int totalPages;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<MovieItemPojo> movieItemPojos = null;
 
     public int getPage() {
         return page;
@@ -50,12 +50,12 @@ public class MovieItemResult {
         this.totalPages = totalPages;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<MovieItemPojo> getMovieItemPojos() {
+        return movieItemPojos;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setMovieItemPojos(List<MovieItemPojo> movieItemPojos) {
+        this.movieItemPojos = movieItemPojos;
     }
 
 }

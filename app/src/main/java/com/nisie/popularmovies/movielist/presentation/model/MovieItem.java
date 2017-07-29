@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
+import static android.R.attr.id;
+
 /**
  * @author by natha on 6/26/2017.
  */
@@ -16,8 +18,11 @@ public class MovieItem implements Parcelable {
     private float rating;
     private String ratingText;
     private String synopsis;
+    private int id;
 
-    public MovieItem(String imgUrl, String title, String releaseDate, float rating, String synopsis) {
+    public MovieItem(int id, String imgUrl, String title, String releaseDate, float rating,
+                     String synopsis) {
+        this.id = id;
         this.imgUrl = imgUrl;
         this.title = title;
         this.releaseDate = releaseDate;
@@ -27,6 +32,7 @@ public class MovieItem implements Parcelable {
     }
 
     protected MovieItem(Parcel in) {
+        id = in.readInt();
         imgUrl = in.readString();
         title = in.readString();
         releaseDate = in.readString();
@@ -82,11 +88,16 @@ public class MovieItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(imgUrl);
         parcel.writeString(title);
         parcel.writeString(releaseDate);
         parcel.writeFloat(rating);
         parcel.writeString(ratingText);
         parcel.writeString(synopsis);
+    }
+
+    public int getId() {
+        return id;
     }
 }

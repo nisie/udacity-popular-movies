@@ -5,5 +5,6 @@ package com.nisie.popularmovies.main.presentation;
  */
 
 public interface BasePresenter {
+    void unbind();
 
 }

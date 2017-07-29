@@ -5,7 +5,7 @@ import com.nisie.popularmovies.main.network.ErrorNetworkException;
 import com.nisie.popularmovies.movielist.domain.model.MovieItemDomain;
 import com.nisie.popularmovies.movielist.domain.model.MovieResultDomain;
 import com.nisie.popularmovies.movielist.domain.network.pojo.MovieItemResult;
-import com.nisie.popularmovies.movielist.domain.network.pojo.Result;
+import com.nisie.popularmovies.movielist.domain.network.pojo.MovieItemPojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,27 +36,27 @@ public class MovieListMapper extends BaseMapper implements Func1<Response<MovieI
         return new MovieResultDomain(result.getPage(),
                 result.getTotalResults(),
                 result.getTotalPages(),
-                convertToListDomainItem(result.getResults()));
+                convertToListDomainItem(result.getMovieItemPojos()));
     }
 
-    private List<MovieItemDomain> convertToListDomainItem(List<Result> results) {
+    private List<MovieItemDomain> convertToListDomainItem(List<MovieItemPojo> results) {
         List<MovieItemDomain> listDomain = new ArrayList<>();
         if (results != null) {
-            for (Result result : results) {
-                listDomain.add(new MovieItemDomain(result.getVoteCount(),
-                        result.getId(),
-                        result.isVideo(),
-                        result.getVoteAverage(),
-                        result.getTitle(),
-                        result.getPopularity(),
-                        result.getPosterPath(),
-                        result.getOriginalLanguage(),
-                        result.getOriginalTitle(),
-                        result.getGenreIds(),
-                        result.getBackdropPath(),
-                        result.isAdult(),
-                        result.getOverview(),
-                        result.getReleaseDate()
+            for (MovieItemPojo movieItemPojo : results) {
+                listDomain.add(new MovieItemDomain(movieItemPojo.getVoteCount(),
+                        movieItemPojo.getId(),
+                        movieItemPojo.isVideo(),
+                        movieItemPojo.getVoteAverage(),
+                        movieItemPojo.getTitle(),
+                        movieItemPojo.getPopularity(),
+                        movieItemPojo.getPosterPath(),
+                        movieItemPojo.getOriginalLanguage(),
+                        movieItemPojo.getOriginalTitle(),
+                        movieItemPojo.getGenreIds(),
+                        movieItemPojo.getBackdropPath(),
+                        movieItemPojo.isAdult(),
+                        movieItemPojo.getOverview(),
+                        movieItemPojo.getReleaseDate()
                 ));
             }
         }
