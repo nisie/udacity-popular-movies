@@ -1,5 +1,6 @@
 package com.nisie.popularmovies.movielist.presentation.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -143,7 +144,8 @@ public class MovieListActivity extends AppCompatActivity
 
     @Override
     public void goToDetail(MovieItem movieItem) {
-        startActivity(MovieDetailActivity.getCallingIntent(this, movieItem));
+        startActivityForResult(MovieDetailActivity.getCallingIntent(this, movieItem),
+                MovieDetailActivity.REQUEST_FAVORITE);
     }
 
     @Override
@@ -167,5 +169,15 @@ public class MovieListActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.unbind();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MovieDetailActivity.REQUEST_FAVORITE && resultCode == AppCompatActivity
+                .RESULT_OK) {
+            adapter.clearList();
+            presenter.getFavorited(getContentResolver());
+        } else
+            super.onActivityResult(requestCode, resultCode, data);
     }
 }

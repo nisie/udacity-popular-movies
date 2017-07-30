@@ -44,6 +44,8 @@ public interface MovieDetailPresenter extends BasePresenter{
         void finishLoadingReviews();
 
         void onIsFavorited();
+
+        void setFavoriteResultOk();
     }
 
 }

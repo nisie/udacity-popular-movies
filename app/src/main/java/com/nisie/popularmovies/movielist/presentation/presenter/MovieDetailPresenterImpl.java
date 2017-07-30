@@ -75,20 +75,18 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
         Uri uri = contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
         if (uri != null) {
-            Log.d(MovieDetailPresenterImpl.class.getSimpleName(), uri.toString());
+            viewListener.setFavoriteResultOk();
         }
     }
 
     @Override
     public void removeFavorite(ContentResolver contentResolver, int id) {
-        try {
-            int delete = contentResolver.delete(MovieContract.MovieEntry.CONTENT_URI,
-                    MovieContract.MovieEntry.COLUMN_ID + " =?",
-                    new String[]{String.valueOf(id)});
-            Log.d(MovieDetailPresenterImpl.class.getSimpleName(), delete + "");
-        } catch (SQLException e) {
-            Log.e(MovieDetailPresenterImpl.class.getSimpleName(), e.toString());
-        }
+        int delete = contentResolver.delete(MovieContract.MovieEntry.CONTENT_URI,
+                MovieContract.MovieEntry.COLUMN_ID + " =?",
+                new String[]{String.valueOf(id)});
+        if (delete > 0)
+            viewListener.setFavoriteResultOk();
+
     }
 
     @Override

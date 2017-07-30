@@ -1,5 +1,6 @@
 package com.nisie.popularmovies.movielist.presentation.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -34,6 +35,7 @@ import com.nisie.popularmovies.movielist.presentation.presenter.MovieDetailPrese
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailPresenter.View {
 
     private static final String ARGS_MOVIE = "ARGS_MOVIE";
+    public static final int REQUEST_FAVORITE = 101;
 
     View reviewView;
     View trailerView;
@@ -226,5 +228,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public void onIsFavorited() {
         MenuItem favorite = menu.findItem(R.id.favorite);
         setFavorite(favorite);
+    }
+
+    @Override
+    public void setFavoriteResultOk() {
+        setResult(Activity.RESULT_OK);
     }
 }
