@@ -7,5 +7,5 @@ package com.nisie.popularmovies.movielist.domain;
 public interface APICONSTANT {
 
     String API_KEY = "api_key";
-    String KEY = "e355e388ec3a7934853ad2a2557f2b05";
+    String KEY = "[Please Insert your API Key here]";
 }
