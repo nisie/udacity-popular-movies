@@ -62,7 +62,7 @@ public class TrailerAdapter extends BaseRecyclerViewAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
         MovieTrailerViewModel item = list.get(position);
-        viewHolder.bind(this,item);
+        viewHolder.bind(this, item);
     }
 
     @Override
@@ -85,5 +85,13 @@ public class TrailerAdapter extends BaseRecyclerViewAdapter {
 
     public void onItemClick(MovieTrailerViewModel item) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getVideoUrl())));
+    }
+
+    public void onShareClick(MovieTrailerViewModel item) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, item.getVideoUrl());
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
     }
 }

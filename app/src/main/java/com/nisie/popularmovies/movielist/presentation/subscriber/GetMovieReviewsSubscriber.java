@@ -36,7 +36,12 @@ public class GetMovieReviewsSubscriber extends Subscriber<MovieReviewsDomain> {
     @Override
     public void onNext(MovieReviewsDomain movieReviewsDomain) {
         viewListener.finishLoadingReviews();
-        viewListener.onSuccessGetReviews(convertToViewModel(movieReviewsDomain));
+        ObservableArrayList<MovieReviewViewModel> listReview = convertToViewModel
+                (movieReviewsDomain);
+        if (listReview.isEmpty())
+            viewListener.onEmptyReview();
+        else
+            viewListener.onSuccessGetReviews(listReview);
 
     }
 

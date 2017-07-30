@@ -46,6 +46,10 @@ public interface MovieDetailPresenter extends BasePresenter{
         void onIsFavorited();
 
         void setFavoriteResultOk();
+
+        void onEmptyReview();
+
+        void onEmptyTrailer();
     }
 
 }

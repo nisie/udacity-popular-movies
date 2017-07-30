@@ -9,6 +9,7 @@
         <variable
             name="trailer"
             type="com.nisie.popularmovies.movielist.presentation.model.MovieTrailerViewModel"/>
+
         <variable
             name="trailerAdapter"
             type="com.nisie.popularmovies.movielist.presentation.ui.adapter.TrailerAdapter"/>
@@ -33,24 +34,44 @@
             android:padding="@dimen/default_gap">
 
             <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/gap_small"
+                android:layout_marginRight="@dimen/gap_small"
+                android:contentDescription="@string/share"
+                android:src="@drawable/ic_share_black_24dp"
+                android:onClick="@{()->trailerAdapter.onShareClick(trailer)}"
+                />
+
+            <ImageView
                 android:id="@+id/iv_thumbnail"
                 android:layout_width="@dimen/trailer_size"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:contentDescription="@string/trailer"
                 app:imageUrl="@{trailer.thumbnailUrl}"
                 tools:src="@mipmap/ic_launcher"
                 />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_toEndOf="@id/iv_thumbnail"
+                android:layout_toLeftOf="@id/iv_share"
                 android:layout_toRightOf="@id/iv_thumbnail"
+                android:layout_toStartOf="@id/iv_share"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{trailer.name}"
                 tools:text="Test Trailer name"/>
+
         </RelativeLayout>
 
         <View

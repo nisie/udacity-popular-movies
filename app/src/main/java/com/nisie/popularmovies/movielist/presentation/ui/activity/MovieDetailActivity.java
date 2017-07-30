@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -233,5 +232,15 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void setFavoriteResultOk() {
         setResult(Activity.RESULT_OK);
+    }
+
+    @Override
+    public void onEmptyReview() {
+        reviewView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onEmptyTrailer() {
+        trailerView.setVisibility(View.GONE);
     }
 }

@@ -41,7 +41,13 @@ public class GetMovieTrailerSubscriber extends Subscriber<MovieTrailerDomain> {
     @Override
     public void onNext(MovieTrailerDomain movieTrailerDomain) {
         viewListener.finishLoadingTrailer();
-        viewListener.onSuccessGetTrailer(convertToViewModel(movieTrailerDomain));
+        ObservableArrayList<MovieTrailerViewModel> listModel = convertToViewModel
+                (movieTrailerDomain);
+        if (listModel.isEmpty()) {
+            viewListener.onEmptyTrailer();
+        } else {
+            viewListener.onSuccessGetTrailer(listModel);
+        }
     }
 
     private ObservableArrayList<MovieTrailerViewModel> convertToViewModel(MovieTrailerDomain movieTrailerDomain) {
